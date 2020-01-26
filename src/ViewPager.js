@@ -5,7 +5,7 @@ const {width} = Dimensions.get('window');
 
 const TransitionState = {
   IDEAL: 'ideal',
-  SCROLLING: 'scrollling',
+  SCROLLING: 'scrolling',
   SETTLING: 'settling',
 };
 
@@ -33,10 +33,10 @@ export default class ViewPager extends Component {
 
   setPanResponder = () => {
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onStartShouldSetPanResponder: (evt, gestureState) => false,
+      // onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
       onPanResponderGrant: (evt, gestureState) => {
         this.offset.stopAnimation(value => {

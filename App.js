@@ -1,5 +1,14 @@
 import React, {Component} from 'react';
-import {Text, View, SafeAreaView, StyleSheet, Animated} from 'react-native';
+import {
+  Text,
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Animated,
+  Button,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import ViewPager from './src/ViewPager';
 import TransitionManager from './src/PagerTransitionManager/TransitionManager';
 import FadeInFadeOutTransitionStyle from './src/PagerTransitionManager/FadeInFadeOut';
@@ -114,7 +123,14 @@ export default class App extends Component {
                     backgroundColor: 'green',
                   },
                 ]}>
-                <Text style={{}}>two</Text>
+                <TouchableOpacity
+                  style={{padding: 16, backgroundColor: 'red'}}
+                  onPress={() => {
+                    Alert.alert('pressed');
+                  }}>
+                  <Text>Press</Text>
+                </TouchableOpacity>
+                <Text>two</Text>
               </View>
 
               <View
