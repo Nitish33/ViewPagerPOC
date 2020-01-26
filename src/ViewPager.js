@@ -3,6 +3,12 @@ import {Text, View, Animated, PanResponder, Dimensions} from 'react-native';
 
 const {width} = Dimensions.get('window');
 
+const TransitionState = {
+  IDEAL: 'ideal',
+  SCROLLING: 'scrollling',
+  SETTLING: 'settling',
+};
+
 export default class ViewPager extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +16,7 @@ export default class ViewPager extends Component {
     this.currentPage = 0;
     this.offsetValue = 0;
     this.offset = new Animated.Value(0);
+    this.transitionState = TransitionState.IDEAL;
 
     this.setPanResponder();
     this.addAnimationListener();
@@ -45,10 +52,16 @@ export default class ViewPager extends Component {
           return;
         }
 
-        if (Math.abs(dx) < 20) {
+        console.log('current state is', this.transitionState);
+
+        if (
+          this.transitionState === TransitionState.IDEAL &&
+          Math.abs(dx) < 5
+        ) {
           return;
         }
 
+        this.transitionState = TransitionState.SCROLLING;
         const fraction = -dx / width;
         this.offsetValue = fraction;
         this.offset.setValue(this.currentPage + fraction);
@@ -68,6 +81,7 @@ export default class ViewPager extends Component {
 
   settleToFinalValue = () => {
     const finalValue = Math.round(this.offsetValue + this.currentPage);
+    this.transitionState = TransitionState.SETTLING;
 
     Animated.timing(this.offset, {
       toValue: finalValue,
@@ -75,6 +89,7 @@ export default class ViewPager extends Component {
     }).start(() => {
       this.currentPage = finalValue;
       this.offsetValue = 0;
+      this.transitionState = TransitionState.IDEAL;
     });
   };
 

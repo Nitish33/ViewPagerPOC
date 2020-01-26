@@ -1,11 +1,18 @@
 import React, {Component} from 'react';
 import {Text, View, SafeAreaView, StyleSheet, Animated} from 'react-native';
 import ViewPager from './src/ViewPager';
+import TransitionManager from './src/PagerTransitionManager/TransitionManager';
+import FadeInFadeOutTransitionStyle from './src/PagerTransitionManager/FadeInFadeOut';
+import ScaleTransition from './src/PagerTransitionManager/ScaleTransition';
+import DepthTransition from './src/PagerTransitionManager/DepthTransition';
+import ClockTransition from './src/PagerTransitionManager/ClockTransition';
+import ZoomOut from './src/PagerTransitionManager/ZoomoutTransition';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
+    this.transitionManager = new ZoomOut();
     this.state = {
       offsetValue: 0,
       currentPage: 0,
@@ -65,6 +72,11 @@ export default class App extends Component {
 
   render() {
     const {value, currentPage, offsetValue} = this.state;
+    const pageInfo = {
+      currentPage,
+      offset: value,
+      width: this.pagerWidth,
+    };
 
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -85,14 +97,9 @@ export default class App extends Component {
               <View
                 style={[
                   localStyle.pagerContainerStyle,
+                  this.transitionManager.getTransitionStyleFor(0, pageInfo),
                   {
-                    transform: [
-                      {translateX: 0},
-                      {rotate: this.getRotationFor(0)},
-                      {scale: this.getScaleFor(0)},
-                    ],
                     backgroundColor: 'red',
-                    opacity: this.getOpacityFor(0),
                   },
                 ]}>
                 <Text style={{}}>One</Text>
@@ -101,30 +108,20 @@ export default class App extends Component {
               <View
                 style={[
                   localStyle.pagerContainerStyle,
+                  this.transitionManager.getTransitionStyleFor(1, pageInfo),
                   {
                     backgroundColor: 'green',
-                    transform: [
-                      {translateX: -(this.pagerWidth * 1)},
-                      {rotate: this.getRotationFor(1)},
-                      {scale: this.getScaleFor(1)},
-                    ],
-                    opacity: this.getOpacityFor(1),
                   },
                 ]}>
-                <Text style={{}}>Two</Text>
+                <Text style={{}}>two</Text>
               </View>
 
               <View
                 style={[
                   localStyle.pagerContainerStyle,
+                  this.transitionManager.getTransitionStyleFor(2, pageInfo),
                   {
                     backgroundColor: 'red',
-                    transform: [
-                      {translateX: -(this.pagerWidth * 2)},
-                      {rotate: this.getRotationFor(2)},
-                      {scale: this.getScaleFor(2)},
-                    ],
-                    opacity: this.getOpacityFor(2),
                   },
                 ]}>
                 <Text style={{}}>Three</Text>
@@ -133,14 +130,9 @@ export default class App extends Component {
               <View
                 style={[
                   localStyle.pagerContainerStyle,
+                  this.transitionManager.getTransitionStyleFor(3, pageInfo),
                   {
                     backgroundColor: 'green',
-                    transform: [
-                      {translateX: -(this.pagerWidth * 3)},
-                      {rotate: this.getRotationFor(3)},
-                      {scale: this.getScaleFor(3)},
-                    ],
-                    opacity: this.getOpacityFor(3),
                   },
                 ]}>
                 <Text>Four</Text>
@@ -156,14 +148,9 @@ export default class App extends Component {
                 }}
                 style={[
                   localStyle.pagerContainerStyle,
+                  this.transitionManager.getTransitionStyleFor(4, pageInfo),
                   {
                     backgroundColor: 'red',
-                    transform: [
-                      {translateX: -(this.pagerWidth * 4)},
-                      {rotate: this.getRotationFor(4)},
-                      {scale: this.getScaleFor(4)},
-                    ],
-                    opacity: this.getOpacityFor(4),
                   },
                 ]}>
                 <Text style={{}}>Five</Text>
