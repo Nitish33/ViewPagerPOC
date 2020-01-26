@@ -7,12 +7,13 @@ import ScaleTransition from './src/PagerTransitionManager/ScaleTransition';
 import DepthTransition from './src/PagerTransitionManager/DepthTransition';
 import ClockTransition from './src/PagerTransitionManager/ClockTransition';
 import ZoomOut from './src/PagerTransitionManager/ZoomoutTransition';
+import VerticalFlipTransition from './src/PagerTransitionManager/VerticalFlipTransition';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
-    this.transitionManager = new ZoomOut();
+    this.transitionManager = new VerticalFlipTransition();
     this.state = {
       offsetValue: 0,
       currentPage: 0,

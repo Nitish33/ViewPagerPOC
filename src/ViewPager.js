@@ -16,6 +16,7 @@ export default class ViewPager extends Component {
     this.currentPage = 0;
     this.offsetValue = 0;
     this.offset = new Animated.Value(0);
+    this.offsetWhileInterruption = 0;
     this.transitionState = TransitionState.IDEAL;
 
     this.setPanResponder();
@@ -38,7 +39,9 @@ export default class ViewPager extends Component {
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
       onPanResponderGrant: (evt, gestureState) => {
-        this.offset.stopAnimation();
+        this.offset.stopAnimation(value => {
+          this.offsetWhileInterruption = value;
+        });
       },
       onPanResponderMove: (evt, gestureState) => {
         const {dx} = gestureState;
@@ -52,17 +55,16 @@ export default class ViewPager extends Component {
           return;
         }
 
-        console.log('current state is', this.transitionState);
+        this.transitionState = TransitionState.SCROLLING;
+        const fraction = -dx / width;
 
         if (
           this.transitionState === TransitionState.IDEAL &&
-          Math.abs(dx) < 5
+          Math.abs(fraction) < 0.05
         ) {
           return;
         }
 
-        this.transitionState = TransitionState.SCROLLING;
-        const fraction = -dx / width;
         this.offsetValue = fraction;
         this.offset.setValue(this.currentPage + fraction);
       },
@@ -89,6 +91,7 @@ export default class ViewPager extends Component {
     }).start(() => {
       this.currentPage = finalValue;
       this.offsetValue = 0;
+      this.offsetWhileInterruption = 0;
       this.transitionState = TransitionState.IDEAL;
     });
   };
